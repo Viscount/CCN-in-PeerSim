@@ -5,6 +5,11 @@ import peersim.edsim.EDProtocol;
 import peersim.vector.SingleValueHolder;
 
 public class Infrastructure extends SingleValueHolder implements EDProtocol{
+	
+	public String name;
+	public String type;
+	
+	
 
 	public Infrastructure(String prefix) {
 		// TODO Auto-generated constructor stub
@@ -12,7 +17,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 	}
 
 	@Override
-	public void processEvent(Node arg0, int arg1, Object arg2) {
+	public void processEvent(Node node, int protocolID, Object message) {
 		// TODO Auto-generated method stub
 		
 	}
