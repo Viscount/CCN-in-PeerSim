@@ -1,5 +1,7 @@
 package ccn.protocol;
 
+import java.util.List;
+
 import ccn.entity.ContentStore;
 import ccn.entity.FIB;
 import ccn.entity.Message;
@@ -65,7 +67,20 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 		
 		// handling the data packet
 		if ( message.getMessageType().equals("Data")){
-			
+			// cache
+			// check PIT and forward
+			if (pit.containsKey(message.getDataName())){
+				List facelist = pit.getFace(message.getDataName());
+				if ( !facelist.isEmpty() ){
+					for (int i=0; i<facelist.size(); i++){
+						int target = (int) facelist.get(i);
+						long requester = node.getID();
+						Message data_message = new Message("Data",Integer.valueOf(Long.toString(requester)),message.getDataName());
+						((Transport)node.getProtocol(FastConfig.getTransport(protocolID))).
+						send(node, Network.get(target), data_message, protocolID);
+					}
+				}
+			}
 		}
 	}
 
