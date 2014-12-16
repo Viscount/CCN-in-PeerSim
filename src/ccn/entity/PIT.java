@@ -1,5 +1,6 @@
 package ccn.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,20 @@ public class PIT {
 		return detail.entrySet();
 	}
 	
-	public void addFace(String name, String nodeID){
+	public void addFace(String name, int nodeID){
 		if (!detail.containsKey(name)) return;
 		List facelist = (List) detail.get(name);
 		if ( facelist.contains(nodeID) ) return;
 		else{
+			facelist.add(nodeID);
+			detail.put(name, facelist);
+		}
+	}
+	
+	public void addEntry(String name, int nodeID){
+		if (detail.containsKey(name)) addFace(name,nodeID);
+		else {
+			List facelist = new ArrayList();
 			facelist.add(nodeID);
 			detail.put(name, facelist);
 		}
