@@ -57,6 +57,10 @@ public class PIT {
 		List facelist = (List) detail.get(name);
 		return facelist;
 	}
+	
+	public void deleteEntry(String name){
+		if (detail.containsKey(name)) detail.remove(name);
+	}
 
 }
 

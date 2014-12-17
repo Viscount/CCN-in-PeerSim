@@ -12,15 +12,15 @@ public class ContentStore {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String get(int index){
-		return (String)detail.get(index);
+	public DataItem get(int index){
+		return (DataItem)detail.get(index);
 	}
 	
 	public int contains(String name){
 		int count = 0;
 		for (Iterator it = detail.iterator(); it.hasNext();){
-			String contentName = (String) it.next();
-			if (contentName.equals(name) ) return (count);
+			DataItem contentName = (DataItem) it.next();
+			if (contentName.getName().equals(name) ) return (count);
 			count++;
 		}
 		return -1 ;
@@ -36,6 +36,10 @@ public class ContentStore {
 	
 	public int getCacheSize(){
 		return cache_size;
+	}
+	
+	public void performCache(Message message, String cache_method, String replace_method){
+		
 	}
 
 }

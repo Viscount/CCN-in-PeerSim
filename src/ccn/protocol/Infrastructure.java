@@ -6,6 +6,7 @@ import ccn.entity.ContentStore;
 import ccn.entity.FIB;
 import ccn.entity.Message;
 import ccn.entity.PIT;
+import peersim.config.Configuration;
 import peersim.config.FastConfig;
 import peersim.core.Network;
 import peersim.core.Node;
@@ -14,6 +15,12 @@ import peersim.transport.Transport;
 import peersim.vector.SingleValueHolder;
 
 public class Infrastructure extends SingleValueHolder implements EDProtocol{
+	
+	private static final String PAR_CACHE_METHOD = "cache_method";
+	private static final String PAR_REPLACE_METHOD = "replace_method";
+	
+	public static String cache_method;
+	public static String replace_method;
 	
 	public String name;
 	public String type;
@@ -26,6 +33,8 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 	public Infrastructure(String prefix) {
 		// TODO Auto-generated constructor stub
 		super(prefix);
+		cache_method = Configuration.getString(prefix+"."+PAR_CACHE_METHOD);
+		replace_method = Configuration.getString(prefix+"."+PAR_REPLACE_METHOD);
 	}
 
 	@Override
@@ -68,6 +77,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 		// handling the data packet
 		if ( message.getMessageType().equals("Data")){
 			// cache
+			contentStore.performCache(message, cache_method, replace_method);
 			// check PIT and forward
 			if (pit.containsKey(message.getDataName())){
 				List facelist = pit.getFace(message.getDataName());
@@ -78,6 +88,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 						Message data_message = new Message("Data",Integer.valueOf(Long.toString(requester)),message.getDataName());
 						((Transport)node.getProtocol(FastConfig.getTransport(protocolID))).
 						send(node, Network.get(target), data_message, protocolID);
+						pit.deleteEntry(message.getDataName());
 					}
 				}
 			}
