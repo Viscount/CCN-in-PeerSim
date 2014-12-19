@@ -37,6 +37,12 @@ public class ContentStore {
 		detail.add(data);
 	}
 	
+	public void updateTime(String name){
+		int index = this.contains(name);
+		DataItem data = new DataItem(name,CommonState.getTime());
+		detail.set(index, data);
+	}
+	
 	public int size(){
 		return detail.size();
 	}
