@@ -55,4 +55,22 @@ public class ContentStore {
 		return cache_size;
 	}
 
+	public int getLatestItem() {
+		// TODO Auto-generated method stub
+		long minTime = Long.MAX_VALUE;
+		int index = -1;
+		for (int i=0; i<detail.size(); i++){
+			DataItem data_item = (DataItem) detail.get(i);
+			if ( data_item.getTime() < minTime ){
+				minTime = data_item.getTime();
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+	public void remove(int index){
+		detail.remove(index);
+	}
+
 }

@@ -11,7 +11,7 @@ public class CacheContext {
 	
 	public CacheStrategy cachestrategy;
 
-	public CacheContext(Node node, int protocolID, Message message, String type) {
+	public CacheContext(String type) {
 		// TODO Auto-generated constructor stub
 
 		switch (type)

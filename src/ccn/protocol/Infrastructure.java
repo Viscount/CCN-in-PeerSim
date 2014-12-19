@@ -105,7 +105,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 	}
 	
 	public void performCache(Node node, int protocolID, Message message){
-		cacheSuper = new CacheContext(node, protocolID, message, cache_method);
+		cacheSuper = new CacheContext(cache_method);
 		replaceSuper = new ReplaceContext(replace_method);
 	}
 
