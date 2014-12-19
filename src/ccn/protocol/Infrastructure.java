@@ -6,6 +6,8 @@ import ccn.entity.ContentStore;
 import ccn.entity.FIB;
 import ccn.entity.Message;
 import ccn.entity.PIT;
+import ccn.strategy.CacheContext;
+import ccn.strategy.ReplaceContext;
 import peersim.config.Configuration;
 import peersim.config.FastConfig;
 import peersim.core.Network;
@@ -28,6 +30,9 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 	private PIT pit;
 	private FIB fib;
 	private ContentStore contentStore;
+	
+	private CacheContext cacheSuper;
+	private ReplaceContext replaceSuper;
 	
 	
 	public Infrastructure(String prefix) {
@@ -77,7 +82,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 		// handling the data packet
 		if ( message.getMessageType().equals("Data")){
 			// cache
-			contentStore.performCache(message, cache_method, replace_method);
+			performCache(node, protocolID, message);
 			// check PIT and forward
 			if (pit.containsKey(message.getDataName())){
 				List facelist = pit.getFace(message.getDataName());
@@ -93,6 +98,15 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 				}
 			}
 		}
+	}
+	
+	public ContentStore getContentStore(){
+		return contentStore;
+	}
+	
+	public void performCache(Node node, int protocolID, Message message){
+		cacheSuper = new CacheContext(node, protocolID, message, cache_method);
+		replaceSuper = new ReplaceContext(replace_method);
 	}
 
 }
