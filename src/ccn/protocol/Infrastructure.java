@@ -54,6 +54,7 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 			// check in content store
 			if (contentStore.contains(message.getDataName())!=-1){
 				// cache hit
+				contentStore.updateTime(message.getDataName());
 				long requester = node.getID();
 				Message data_message = new Message("Data",Integer.valueOf(Long.toString(requester)),message.getDataName());
 				// send data packet back
