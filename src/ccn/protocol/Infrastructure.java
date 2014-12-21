@@ -72,10 +72,12 @@ public class Infrastructure extends SingleValueHolder implements EDProtocol{
 					pit.addEntry(message.getDataName(), message.getRequester());
 					// check in FIB for forwarding
 					int next_hop = fib.getNextHop(name);
-					long requester = node.getID();
-					Message forward = new Message(message.getMessageType(),Integer.valueOf(Long.toString(requester)),message.getDataName());
-					((Transport)node.getProtocol(FastConfig.getTransport(protocolID))).
-					send(node, Network.get(next_hop), forward, protocolID);
+					if (next_hop != -1){
+						long requester = node.getID();
+						Message forward = new Message(message.getMessageType(),Integer.valueOf(Long.toString(requester)),message.getDataName());
+						((Transport)node.getProtocol(FastConfig.getTransport(protocolID))).
+						send(node, Network.get(next_hop), forward, protocolID);
+					}
 				}
 			}
 		}
