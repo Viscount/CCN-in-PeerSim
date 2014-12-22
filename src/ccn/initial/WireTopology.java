@@ -36,6 +36,7 @@ public class WireTopology extends WireGraph{
 		int as_num = 1;
 		int bb_num = branch;
 		int dm_num = branch*branch;
+		CommonInfo.branch = branch;
 		// get start point of each domain
 		CommonInfo.startPoint.add(0);
 		CommonInfo.startPoint.add(as_size);
@@ -63,13 +64,17 @@ public class WireTopology extends WireGraph{
 			}
 		}
 		// wire topology between domains
-		int index = 1;
+		int index = 0;
 		for (int i=0; i<CommonInfo.startPoint.size()-1; i++){
-			int root = (int) CommonInfo.startPoint.get(i);
+			int start = (int) CommonInfo.startPoint.get(i);
+			int end = (int) CommonInfo.startPoint.get(i+1);
 			for (int j=0; j<branch; j++){
-				if (index + j <CommonInfo.startPoint.size()-1){
-					g.setEdge(root, (int) CommonInfo.startPoint.get(index+j) );
-					g.setEdge((int) CommonInfo.startPoint.get(index+j),root );
+				index++;
+				if (index < CommonInfo.startPoint.size()-1){
+					int root = start + CommonState.r.nextInt(branch);
+					CommonInfo.addChildNode(root,(int) CommonInfo.startPoint.get(index));
+					g.setEdge(root, (int) CommonInfo.startPoint.get(index) );
+					g.setEdge((int) CommonInfo.startPoint.get(index),root );
 				}
 			}
 		}
