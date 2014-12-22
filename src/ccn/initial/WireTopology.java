@@ -2,6 +2,7 @@ package ccn.initial;
 
 import ccn.util.CommonInfo;
 import peersim.config.Configuration;
+import peersim.core.CommonState;
 import peersim.dynamics.WireGraph;
 import peersim.graph.Graph;
 
@@ -11,8 +12,10 @@ public class WireTopology extends WireGraph{
 	private static final String PAR_AS_SIZE = "as_size";
 	private static final String PAR_BACKBONE_SIZE = "backbone_size";
 	private static final String PAR_DOMAIN_SIZE = "domain_size";
+	private static final String PAR_DEGREE = "degree";
 	
 	private final int branch;
+	private final int degree;
 	private final int as_size;
 	private final int backbone_size;
 	private final int domain_size;
@@ -24,6 +27,7 @@ public class WireTopology extends WireGraph{
 		as_size = Configuration.getInt(prefix+"."+PAR_AS_SIZE,1);
 		backbone_size = Configuration.getInt(prefix+"."+PAR_BACKBONE_SIZE,1);
 		domain_size = Configuration.getInt(prefix+"."+PAR_DOMAIN_SIZE,1);
+		degree = Configuration.getInt(prefix+"."+PAR_DEGREE,2);
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class WireTopology extends WireGraph{
 		int as_num = 1;
 		int bb_num = branch;
 		int dm_num = branch*branch;
-		
+		// get start point of each domain
 		CommonInfo.startPoint.add(0);
 		CommonInfo.startPoint.add(as_size);
 		CommonInfo.bb_start = as_size;
@@ -45,12 +49,28 @@ public class WireTopology extends WireGraph{
 			int base = (int) CommonInfo.startPoint.get(i+branch+1);
 			CommonInfo.startPoint.add(base+domain_size);
 		}
-		
+		// wire topology in each domain
 		for (int i=0; i<CommonInfo.startPoint.size()-1; i++){
 			int start = (int) CommonInfo.startPoint.get(i);
 			int end = (int) CommonInfo.startPoint.get(i+1);
+			int size = end - start;
 			for (int j=start; j<end; j++){
-				
+				for (int times=0; times<degree; times++){
+					int node = start + CommonState.r.nextInt(size);
+					g.setEdge(j, node);
+					g.setEdge(node, j);
+				}
+			}
+		}
+		// wire topology between domains
+		int index = 1;
+		for (int i=0; i<CommonInfo.startPoint.size()-1; i++){
+			int root = (int) CommonInfo.startPoint.get(i);
+			for (int j=0; j<branch; j++){
+				if (index + j <CommonInfo.startPoint.size()-1){
+					g.setEdge(root, (int) CommonInfo.startPoint.get(index+j) );
+					g.setEdge((int) CommonInfo.startPoint.get(index+j),root );
+				}
 			}
 		}
 
