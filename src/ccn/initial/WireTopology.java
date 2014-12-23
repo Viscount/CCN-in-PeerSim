@@ -72,7 +72,7 @@ public class WireTopology extends WireGraph{
 				index++;
 				if (index < CommonInfo.startPoint.size()-1){
 					int root = start + CommonState.r.nextInt(branch);
-					CommonInfo.addChildNode(root,(int) CommonInfo.startPoint.get(index));
+					CommonInfo.parent.set((int) CommonInfo.startPoint.get(index),root);
 					g.setEdge(root, (int) CommonInfo.startPoint.get(index) );
 					g.setEdge((int) CommonInfo.startPoint.get(index),root );
 				}
