@@ -13,7 +13,7 @@ public class Naming implements Control{
 	private static int pid_inf;
 	
 	public Naming(String prefix){
-		Configuration.getPid(prefix+"."+PAR_PROT_INF);
+		pid_inf = Configuration.getPid(prefix+"."+PAR_PROT_INF);
 	}
 
 	@Override
