@@ -6,6 +6,7 @@ public class Message {
 	private int requester;
 	private int dataSize;
 	private String dataName;
+	private int TTL;
 	
 
 	public Message(String type, int request, String name) {
